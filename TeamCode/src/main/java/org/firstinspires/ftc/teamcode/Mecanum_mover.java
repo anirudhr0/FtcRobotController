@@ -25,8 +25,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  */
 @TeleOp(name = "Robot: Field Relative Mecanum Drive", group = "Robot")
 
-
-
 public class Mecanum_mover extends OpMode {
     // This declares the four motors needed
     DcMotor frontLeftDrive;
@@ -70,18 +68,16 @@ public class Mecanum_mover extends OpMode {
 
     @Override
     public void loop() {
-       /* telemetry.addLine("Press A to reset Yaw");
+        telemetry.addLine("Press A to reset Yaw");
         telemetry.addLine("Hold left bumper to drive in robot relative");
         telemetry.addLine("The left joystick sets the robot direction");
         telemetry.addLine("Moving the right joystick left and right turns the robot");
-        */
+
         // If you press the A button, then you reset the Yaw to be zero from the way
         // the robot is currently pointing
-        if (gamepad1.right_bumper){
-            //helloController();
-            driveFieldRelative(1,0,0.0);
+        if (gamepad1.a) {
+            imu.resetYaw();
         }
-
         if (gamepad1.a) {
             imu.resetYaw();
         }
@@ -97,8 +93,9 @@ public class Mecanum_mover extends OpMode {
             // Default condition: Standard Field-Relative joystick drive
             driveFieldRelative(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         }
+            driveFieldRelative(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        }
     }
-
 
     // This routine drives the robot field relative
     private void driveFieldRelative(double forward, double right, double rotate) {
@@ -108,6 +105,9 @@ public class Mecanum_mover extends OpMode {
         telemetry.addData("gamepad1.left_stick_x",right);
         telemetry.addData("gamepad1.right_stick_x",rotate);
         //telemetry.addData("helloController",driveFieldRelative(1,0,0);));
+
+        double theta = Math.atan2(forward, right);
+        double r = Math.hypot(right, forward);
         double theta = Math.atan2(forward, right);
         double r = Math.hypot(right, forward);
 
@@ -151,7 +151,6 @@ public class Mecanum_mover extends OpMode {
         backLeftDrive.setPower(maxSpeed * (backLeftPower / maxPower));
         backRightDrive.setPower(maxSpeed * (backRightPower / maxPower));
     }
-
     public void helloController() {
         driveFieldRelative(0.4,0,0.0);
 
